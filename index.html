@@ -198,6 +198,7 @@
             justify-content: center;
             position: relative;
             overflow: hidden;
+            padding-bottom: 80px; /* ナビゲーションバー用の余白 */
         }
 
         .page-image {
@@ -208,15 +209,21 @@
         }
 
         .nav-buttons {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 15px;
+            border-top: 1px solid #333;
+        }
+
+        .nav-controls {
             display: flex;
             gap: 10px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px;
-            border-radius: 10px;
         }
 
         .nav-btn {
@@ -239,14 +246,9 @@
         }
 
         .page-info {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.7);
             color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
             font-size: 0.9rem;
+            padding: 8px 12px;
         }
 
         .hidden {
@@ -272,13 +274,17 @@
             }
 
             .nav-buttons {
-                bottom: 10px;
-                padding: 8px;
+                padding: 10px;
             }
 
             .nav-btn {
                 padding: 6px 12px;
                 font-size: 0.9rem;
+            }
+
+            .page-info {
+                font-size: 0.8rem;
+                padding: 4px 8px;
             }
         }
     </style>
@@ -366,14 +372,15 @@
 
             <div class="manga-reader" id="manga-reader">
                 <img id="page-image" class="page-image" src="" alt="マンガページ">
-                
-                <div class="page-info">
-                    <span id="page-counter">1 / 1</span>
-                </div>
+            </div>
 
-                <div class="nav-buttons">
+            <div class="nav-buttons">
+                <div class="nav-controls">
                     <button class="nav-btn" id="prev-btn" onclick="previousPage()">前のページ</button>
                     <button class="nav-btn" id="next-btn" onclick="nextPage()">次のページ</button>
+                </div>
+                <div class="page-info">
+                    <span id="page-counter">1 / 1</span>
                 </div>
             </div>
         </div>
