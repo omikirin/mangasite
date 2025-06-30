@@ -393,15 +393,44 @@
         function openManga(mangaId, title, pages) {
             currentMangaId = mangaId;
             currentMangaTitle = title;
-            totalPages = pages;
             currentPage = 1;
 
             document.getElementById('manga-title').textContent = title;
             document.getElementById('home-page').classList.add('hidden');
             document.getElementById('reader-page').classList.remove('hidden');
             
-            updatePage();
+            // 自動ページ数検出モード
+            if (pages === -1) {
+                detectTotalPages();
+            } else {
+                totalPages = pages;
+                updatePage();
+            }
+            
             setupSwipeListeners();
+        }
+
+        function detectTotalPages() {
+            let pageCount = 1;
+            const testImage = new Image();
+            
+            function testNextPage() {
+                testImage.onload = function() {
+                    pageCount++;
+                    testImage.src = `manga/${currentMangaId}/${pageCount}.jpg`;
+                };
+                
+                testImage.onerror = function() {
+                    // 404エラー = ページ終了
+                    totalPages = pageCount - 1;
+                    if (totalPages < 1) totalPages = 1;
+                    updatePage();
+                };
+                
+                testImage.src = `manga/${currentMangaId}/${pageCount}.jpg`;
+            }
+            
+            testNextPage();
         }
 
         function backToHome() {
