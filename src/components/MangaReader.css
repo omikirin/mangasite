@@ -1,0 +1,118 @@
+.manga-reader {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #1a1a1a;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.page-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  overflow: hidden;
+}
+
+.manga-page {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease;
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+}
+
+.manga-page:hover {
+  transform: scale(1.02);
+}
+
+.navigation-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  background-color: #2a2a2a;
+  border-top: 1px solid #444;
+}
+
+.nav-btn {
+  background-color: #4a4a4a;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  min-width: 80px;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nav-btn:hover:not(:disabled) {
+  background-color: #6a6a6a;
+  transform: translateY(-2px);
+}
+
+.nav-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.nav-btn:disabled {
+  background-color: #333;
+  color: #666;
+  cursor: not-allowed;
+}
+
+.page-info {
+  font-size: 18px;
+  font-weight: bold;
+  color: #ccc;
+  min-width: 80px;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .navigation-controls {
+    padding: 15px 20px;
+  }
+  
+  .nav-btn {
+    padding: 10px 16px;
+    font-size: 14px;
+    min-width: 60px;
+  }
+  
+  .page-info {
+    font-size: 16px;
+    min-width: 60px;
+  }
+  
+  .page-container {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navigation-controls {
+    padding: 10px 15px;
+  }
+  
+  .nav-btn {
+    padding: 8px 12px;
+    font-size: 12px;
+    min-width: 50px;
+  }
+  
+  .page-info {
+    font-size: 14px;
+    min-width: 50px;
+  }
+}
