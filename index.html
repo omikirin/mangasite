@@ -1,14 +1,509 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>おおみきりんの漫画集</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-    <h1>おおみきりんの漫画集</h1>
-  </body>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📚 おおみきりんの漫画集</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+            color: white;
+            min-height: 100vh;
+        }
+
+        .app {
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        /* ホームページスタイル */
+        .home-page {
+            min-height: 100vh;
+        }
+
+        .site-header {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, #2a2a2a, #3a3a3a);
+            margin-bottom: 2rem;
+        }
+
+        .site-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .site-header p {
+            font-size: 1.1rem;
+            color: #ccc;
+            margin: 0;
+        }
+
+        .manga-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 0 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .manga-card {
+            background-color: #2a2a2a;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #444;
+            cursor: pointer;
+        }
+
+        .manga-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .manga-cover {
+            width: 100%;
+            height: 250px;
+            overflow: hidden;
+            background-color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .manga-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .manga-card:hover .manga-cover img {
+            transform: scale(1.05);
+        }
+
+        .manga-info {
+            padding: 1.5rem;
+        }
+
+        .manga-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .manga-info p {
+            color: #ccc;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+            font-size: 0.9rem;
+        }
+
+        .manga-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tag {
+            background-color: #4a4a4a;
+            color: #fff;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .manga-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .manga-meta span {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .read-btn {
+            background-color: #4a9eff;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .read-btn:hover {
+            background-color: #357abd;
+            transform: translateY(-1px);
+        }
+
+        .site-footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid #333;
+            color: #666;
+        }
+
+        /* リーダーページスタイル */
+        .reader-page {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #000;
+        }
+
+        .reader-header {
+            background-color: #1a1a1a;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
+
+        .back-btn {
+            background-color: #4a4a4a;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background-color: #5a5a5a;
+        }
+
+        .manga-reader {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            user-select: none;
+        }
+
+        .nav-buttons {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .nav-btn {
+            background-color: #4a9eff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background-color: #357abd;
+        }
+
+        .nav-btn:disabled {
+            background-color: #666;
+            cursor: not-allowed;
+        }
+
+        .page-info {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .manga-grid {
+                grid-template-columns: 1fr;
+                padding: 0 1rem;
+            }
+            
+            .site-header {
+                padding: 1.5rem;
+            }
+            
+            .site-header h1 {
+                font-size: 2rem;
+            }
+            
+            .manga-cover {
+                height: 200px;
+            }
+
+            .nav-buttons {
+                bottom: 10px;
+                padding: 8px;
+            }
+
+            .nav-btn {
+                padding: 6px 12px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="app">
+        <!-- ホームページ -->
+        <div id="home-page" class="home-page">
+            <header class="site-header">
+                <h1>📚 マンガサイト</h1>
+                <p>お気に入りのマンガをお楽しみください</p>
+            </header>
+
+            <main class="manga-grid">
+                <div class="manga-card" onclick="openManga('manga1', 'サンプルマンガ1', 8)">
+                    <div class="manga-cover">
+                        <img src="manga/manga1/cover.jpg" alt="サンプルマンガ1" 
+                             onerror="this.src='data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;200&quot; height=&quot;280&quot;><rect width=&quot;100%&quot; height=&quot;100%&quot; fill=&quot;%23333&quot;/><text x=&quot;50%&quot; y=&quot;45%&quot; fill=&quot;white&quot; text-anchor=&quot;middle&quot; dy=&quot;.3em&quot; font-size=&quot;16&quot;>サンプルマンガ1</text><text x=&quot;50%&quot; y=&quot;55%&quot; fill=&quot;%23ccc&quot; text-anchor=&quot;middle&quot; dy=&quot;.3em&quot; font-size=&quot;12&quot;>8ページ</text></svg>'">
+                    </div>
+                    <div class="manga-info">
+                        <h3>サンプルマンガ1</h3>
+                        <p>面白いマンガの説明文です。冒険とアクションが満載の物語。</p>
+                        <div class="manga-tags">
+                            <span class="tag">アクション</span>
+                            <span class="tag">冒険</span>
+                        </div>
+                        <div class="manga-meta">
+                            <span>8ページ</span>
+                            <button class="read-btn">読む</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="manga-card" onclick="openManga('manga2', 'サンプルマンガ2', 5)">
+                    <div class="manga-cover">
+                        <img src="manga/manga2/cover.jpg" alt="サンプルマンガ2"
+                             onerror="this.src='data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;200&quot; height=&quot;280&quot;><rect width=&quot;100%&quot; height=&quot;100%&quot; fill=&quot;%23333&quot;/><text x=&quot;50%&quot; y=&quot;45%&quot; fill=&quot;white&quot; text-anchor=&quot;middle&quot; dy=&quot;.3em&quot; font-size=&quot;16&quot;>サンプルマンガ2</text><text x=&quot;50%&quot; y=&quot;55%&quot; fill=&quot;%23ccc&quot; text-anchor=&quot;middle&quot; dy=&quot;.3em&quot; font-size=&quot;12&quot;>5ページ</text></svg>'">
+                    </div>
+                    <div class="manga-info">
+                        <h3>サンプルマンガ2</h3>
+                        <p>もう一つの面白いマンガです。ロマンスとコメディ要素もあります。</p>
+                        <div class="manga-tags">
+                            <span class="tag">ロマンス</span>
+                            <span class="tag">コメディ</span>
+                        </div>
+                        <div class="manga-meta">
+                            <span>5ページ</span>
+                            <button class="read-btn">読む</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="manga-card" onclick="openManga('manga3', 'サンプルマンガ3', 12)">
+                    <div class="manga-cover">
+                        <img src="manga/manga3/cover.jpg" alt="サンプルマンガ3"
+                             onerror="this.src='data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;200&quot; height=&quot;280&quot;><rect width=&quot;100%&quot; height=&quot;100%&quot; fill=&quot;%23333&quot;/><text x=&quot;50%&quot; y=&quot;45%&quot; fill=&quot;white&quot; text-anchor=&quot;middle&quot; dy=&quot;.3em&quot; font-size=&quot;16&quot;>サンプルマンガ3</text><text x=&quot;50%&quot; y=&quot;55%&quot; fill=&quot;%23ccc&quot; text-anchor=&quot;middle&quot; dy=&quot;.3em&quot; font-size=&quot;12&quot;>12ページ</text></svg>'">
+                    </div>
+                    <div class="manga-info">
+                        <h3>サンプルマンガ3</h3>
+                        <p>SF要素満載のマンガ。未来の世界での壮大な物語。</p>
+                        <div class="manga-tags">
+                            <span class="tag">SF</span>
+                            <span class="tag">ドラマ</span>
+                        </div>
+                        <div class="manga-meta">
+                            <span>12ページ</span>
+                            <button class="read-btn">読む</button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <footer class="site-footer">
+                <p>© 2024 マンガサイト - シンプルで使いやすいマンガリーダー</p>
+            </footer>
+        </div>
+
+        <!-- リーダーページ -->
+        <div id="reader-page" class="reader-page hidden">
+            <header class="reader-header">
+                <button class="back-btn" onclick="backToHome()">← ホームに戻る</button>
+                <h2 id="manga-title">マンガタイトル</h2>
+                <div></div>
+            </header>
+
+            <div class="manga-reader" id="manga-reader">
+                <img id="page-image" class="page-image" src="" alt="マンガページ">
+                
+                <div class="page-info">
+                    <span id="page-counter">1 / 1</span>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="nav-btn" id="prev-btn" onclick="previousPage()">前のページ</button>
+                    <button class="nav-btn" id="next-btn" onclick="nextPage()">次のページ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // アプリケーション状態
+        let currentPage = 1;
+        let totalPages = 1;
+        let currentMangaId = '';
+        let currentMangaTitle = '';
+
+        // タッチ/スワイプサポート
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        function openManga(mangaId, title, pages) {
+            currentMangaId = mangaId;
+            currentMangaTitle = title;
+            totalPages = pages;
+            currentPage = 1;
+
+            document.getElementById('manga-title').textContent = title;
+            document.getElementById('home-page').classList.add('hidden');
+            document.getElementById('reader-page').classList.remove('hidden');
+            
+            updatePage();
+            setupSwipeListeners();
+        }
+
+        function backToHome() {
+            document.getElementById('reader-page').classList.add('hidden');
+            document.getElementById('home-page').classList.remove('hidden');
+            removeSwipeListeners();
+        }
+
+        function updatePage() {
+            const pageImage = document.getElementById('page-image');
+            const pageCounter = document.getElementById('page-counter');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+
+            // 画像パスを設定
+            pageImage.src = `manga/${currentMangaId}/${currentPage}.jpg`;
+            pageImage.onerror = function() {
+                this.src = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="600"><rect width="100%" height="100%" fill="%23333"/><text x="50%" y="40%" fill="white" text-anchor="middle" dy=".3em" font-size="24">${currentMangaTitle}</text><text x="50%" y="50%" fill="%23ccc" text-anchor="middle" dy=".3em" font-size="18">ページ ${currentPage}</text><text x="50%" y="60%" fill="%23ccc" text-anchor="middle" dy=".3em" font-size="14">画像が見つかりません</text></svg>`;
+            };
+
+            // ページカウンター更新
+            pageCounter.textContent = `${currentPage} / ${totalPages}`;
+
+            // ボタン状態更新
+            prevBtn.disabled = currentPage <= 1;
+            nextBtn.disabled = currentPage >= totalPages;
+        }
+
+        function previousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                updatePage();
+            }
+        }
+
+        function nextPage() {
+            if (currentPage < totalPages) {
+                currentPage++;
+                updatePage();
+            }
+        }
+
+        function setupSwipeListeners() {
+            const reader = document.getElementById('manga-reader');
+            
+            reader.addEventListener('touchstart', handleTouchStart, { passive: true });
+            reader.addEventListener('touchend', handleTouchEnd, { passive: true });
+            
+            // キーボードサポート
+            document.addEventListener('keydown', handleKeydown);
+        }
+
+        function removeSwipeListeners() {
+            const reader = document.getElementById('manga-reader');
+            
+            reader.removeEventListener('touchstart', handleTouchStart);
+            reader.removeEventListener('touchend', handleTouchEnd);
+            document.removeEventListener('keydown', handleKeydown);
+        }
+
+        function handleTouchStart(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        }
+
+        function handleTouchEnd(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }
+
+        function handleSwipe() {
+            const threshold = 50; // 最小スワイプ距離
+            const diff = touchStartX - touchEndX;
+
+            if (Math.abs(diff) > threshold) {
+                if (diff > 0) {
+                    // 左スワイプ = 次のページ
+                    nextPage();
+                } else {
+                    // 右スワイプ = 前のページ
+                    previousPage();
+                }
+            }
+        }
+
+        function handleKeydown(e) {
+            switch(e.key) {
+                case 'ArrowLeft':
+                    previousPage();
+                    break;
+                case 'ArrowRight':
+                    nextPage();
+                    break;
+                case 'Escape':
+                    backToHome();
+                    break;
+            }
+        }
+
+        // 初期化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📚 マンガサイトが読み込まれました');
+        });
+    </script>
+</body>
 </html>
