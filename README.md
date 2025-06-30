@@ -44,4 +44,3 @@ manga-site/
 ```
 
 MIT License
-EOF < /dev/null
