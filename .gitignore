@@ -20,4 +20,3 @@ Thumbs.db
 
 # Local development
 .cache/
-EOF < /dev/null
