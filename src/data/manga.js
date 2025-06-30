@@ -1,6 +1,6 @@
 const mangaList = [
   {
-49ye62-codex/漫画を読むサイトを作成
+
     id: 'manga1',
     title: '漫画1',
     description: 'おおみきりんによる作品その1',
@@ -13,6 +13,7 @@ const mangaList = [
     description: 'おおみきりんによる作品その2',
     coverImage: '/manga/manga2/cover.jpg',
 
+
     id: 'sample1',
     title: 'サンプルマンガ1',
     description: '面白いマンガの説明文です',
@@ -24,6 +25,7 @@ const mangaList = [
     title: 'サンプルマンガ2',
     description: 'もう一つの面白いマンガです',
     coverImage: '/manga/sample2-cover.jpg',
+
     pages: 5,
   },
 ]

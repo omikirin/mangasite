@@ -10,8 +10,13 @@ function MangaList() {
         <h1>おおみきりんの漫画集</h1>
         <p>お好みの作品をお楽しみください</p>
 
+
+        <h1>おおみきりんの漫画集</h1>
+        <p>お好みの作品をお楽しみください</p>
+
         <h1>📚 マンガサイト</h1>
         <p>お気に入りのマンガをお楽しみください</p>
+
 
       </header>
 
@@ -39,6 +44,7 @@ function MangaList() {
             </div>
           </Link>
 
+
           <div key={manga.id} className="manga-card">
             <div className="manga-cover">
               <img
@@ -59,6 +65,7 @@ function MangaList() {
             </div>
           </div>
 
+
         ))}
       </main>
 
@@ -66,7 +73,11 @@ function MangaList() {
 
         <p>© 2024 おおみきりんの漫画集 - React + Vite で構築</p>
 
+
+        <p>© 2024 おおみきりんの漫画集 - React + Vite で構築</p>
+
         <p>© 2024 マンガサイト - React + Vite で構築</p>
+
 
       </footer>
     </div>
